@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-
+import { Sede } from '../models/sede';
+import { SedeService } from '../services/sede.services';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -10,5 +11,18 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent],
 })
 export class Tab1Page {
-  constructor() {}
+
+  listadoSedes: Sede[];
+
+  constructor(private sedeService:SedeService) {}
+
+  ngOnInit():void{
+    this.sedeService.consultarSedes().subscribe({
+      next: (response: Sede[])=>{
+      },
+      error:(error:any)=>{
+          console.log("error",error)
+      }
+    });
+  }
 }
