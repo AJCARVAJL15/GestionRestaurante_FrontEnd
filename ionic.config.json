@@ -1,0 +1,7 @@
+{
+  "name": "GestionRestaurante_FrontEnd",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
