@@ -14,5 +14,8 @@ export class SedeService{
         consultarSedes():Observable<Sede[]>{
             return this.HttClient.get<Sede[]>(`${environment.url}/sede/all`);
         }
+        agregarSedes(body:Sede){
+            return this.HttClient.post<Sede[]>(`${environment.url}/sede/create`, body);
+        }
     
 }

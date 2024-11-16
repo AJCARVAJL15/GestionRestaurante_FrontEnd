@@ -6,12 +6,63 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
-</ion-content>
+
+<ion-label position="stacked">Listado Proveedores</ion-label>
+
+        <br><br>
+        <form [formGroup]="form">
+         
+          <ion-item>
+            <ion-label position="stacked">Nombre sede</ion-label>
+            <ion-input type="text" required formControlName="nombre_sede"></ion-input>
+          </ion-item>
+       
+          <ion-item>
+            <ion-label position="stacked">Direccion Sede</ion-label>
+            <ion-input type="text" required formControlName="direccion_sede"></ion-input>
+          </ion-item>
+       
+          <ion-item>
+            <ion-label position="stacked">Telefono</ion-label>
+            <ion-input type="text" required formControlName="telefono_contacto"></ion-input>
+          </ion-item>
+       
+          <ion-item>
+            <ion-label position="stacked">Tipo</ion-label>
+            <ion-input type="text" required formControlName="tipo"></ion-input>
+          </ion-item>
+
+          
+          <ion-item>
+            <ion-label position="stacked">Estado</ion-label>
+            <ion-input type="text" required formControlName="estado"></ion-input>
+          </ion-item>
+       
+          <div class="btn-container">
+            <ion-button expand="block" (click)="submitForm()" >Registrar</ion-button>
+          </div>
+        </form>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="2"><strong>Nombre</strong></ion-col>
+            <ion-col size="4"><strong>Direccion</strong></ion-col>
+            <ion-col size="2"><strong>Telefono</strong></ion-col>
+            <ion-col size="2"><strong>Tipo</strong></ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let sede of listadoSedes">
+            <ion-col size="2">{{sede.nombre_sede}}</ion-col>
+            <ion-col size="4">{{sede.direccion_sede}}</ion-col>
+            <ion-col size="2">{{sede.telefono_contacto}}</ion-col>
+            <ion-col size="2">{{sede.tipo}}</ion-col>
+            <ion-col size="2">
+              <ion-icon name="folder-outline" style="cursor: pointer;margin-left: 10px;"></ion-icon>
+              <ion-icon name="folder-outline" style="cursor: pointer;margin-left: 10px;"></ion-icon>
+            </ion-col>
+          </ion-row>
+
+
+
+        </ion-grid>
