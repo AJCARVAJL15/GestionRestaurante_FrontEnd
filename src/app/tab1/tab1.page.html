@@ -6,13 +6,8 @@
   </ion-toolbar>
 </ion-header>
 
-
-
-<ion-label position="stacked">Listado Proveedores</ion-label>
-
-        <br><br>
+<ion-content>
         <form [formGroup]="form">
-         
           <ion-item>
             <ion-label position="stacked">Nombre sede</ion-label>
             <ion-input type="text" required formControlName="nombre_sede"></ion-input>
@@ -28,41 +23,62 @@
             <ion-input type="text" required formControlName="telefono_contacto"></ion-input>
           </ion-item>
        
-          <ion-item>
+          <!-- <ion-item>
             <ion-label position="stacked">Tipo</ion-label>
             <ion-input type="text" required formControlName="tipo"></ion-input>
+          </ion-item> -->
+
+           <ion-item>
+            <ion-select formControlName="tipo" placeholder="Tipo de sede">
+              <ion-select-option value="Propia">Propia</ion-select-option>
+              <ion-select-option value="Franquicia">Franquicia</ion-select-option>
+            </ion-select>
           </ion-item>
 
-          
           <ion-item>
-            <ion-label position="stacked">Estado</ion-label>
-            <ion-input type="text" required formControlName="estado"></ion-input>
+            <ion-select formControlName="estado" placeholder="Estado de la sede">
+              <ion-select-option value="Operativa">Operativa</ion-select-option>
+              <ion-select-option value="Mantenimiento">Mantenimiento</ion-select-option>
+              <ion-select-option value="Cerrada">Cerrada</ion-select-option>
+            </ion-select>
           </ion-item>
+          
        
           <div class="btn-container">
             <ion-button expand="block" (click)="submitForm()" >Registrar</ion-button>
           </div>
         </form>
+        <div class="card-container">
+          <ion-card *ngFor="let sede of listadoSedes"  class="card-block">
+            <ion-card-header>
+              <div style="display: flex; gap: 5px; justify-content: space-between;">
+                <div><ion-card-title>{{sede.nombre_sede}}</ion-card-title></div>
+               <div style="display: flex;">
+                <div>
+                  <ion-button size="small" (click)="showModal(sede)" >
+                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                </svg>
+              </ion-button>
+                </div>
+                <div>
 
-        <ion-grid>
-          <ion-row>
-            <ion-col size="2"><strong>Nombre</strong></ion-col>
-            <ion-col size="4"><strong>Direccion</strong></ion-col>
-            <ion-col size="2"><strong>Telefono</strong></ion-col>
-            <ion-col size="2"><strong>Tipo</strong></ion-col>
-          </ion-row>
-
-          <ion-row *ngFor="let sede of listadoSedes">
-            <ion-col size="2">{{sede.nombre_sede}}</ion-col>
-            <ion-col size="4">{{sede.direccion_sede}}</ion-col>
-            <ion-col size="2">{{sede.telefono_contacto}}</ion-col>
-            <ion-col size="2">{{sede.tipo}}</ion-col>
-            <ion-col size="2">
-              <ion-icon name="folder-outline" style="cursor: pointer;margin-left: 10px;"></ion-icon>
-              <ion-icon name="folder-outline" style="cursor: pointer;margin-left: 10px;"></ion-icon>
-            </ion-col>
-          </ion-row>
-
-
-
-        </ion-grid>
+                  <ion-button size="small" (click)="borrarsede(sede)">
+        
+                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                </svg>
+              </ion-button>
+                </div>
+               </div>
+            </div>
+           
+            </ion-card-header>
+            <ion-card-content> Ubicacion :{{sede.direccion_sede}}</ion-card-content>
+            <ion-card-content> Telefono: {{sede.telefono_contacto}} </ion-card-content>
+            <ion-card-content> Tipo de sede: {{sede.tipo}} </ion-card-content>
+            <ion-card-content> Estado:{{sede.estado}} </ion-card-content>
+          </ion-card>
+          </div>
+      </ion-content>
+   

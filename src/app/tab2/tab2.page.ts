@@ -79,9 +79,10 @@ export class Tab2Page {
         },
         {
           name: 'tipo',
-          type: 'text',
-          placeholder: 'Tipo de sede',
-          value: this.form.get('tipo')?.value,
+          type: 'radio',
+          label: 'Oficina',  // El primer radio para "Oficina"
+      value: 'oficina',  // El valor que se asignará si se selecciona
+        checked: this.form.get('tipo')?.value === 'oficina'
         },
         {
           name: 'estado',

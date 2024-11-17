@@ -1,25 +1,29 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent,IonRow,IonIcon,IonCol,IonGrid,IonLabel,IonInput,IonItem,IonButton } from '@ionic/angular/standalone';
+import { IonRow,IonCol,IonGrid,IonLabel,IonInput,IonItem, IonHeader, IonToolbar, IonTitle, IonContent,IonCard,IonCardHeader,IonCardTitle,IonCardSubtitle,IonCardContent,IonButton,IonAlert,IonIcon,IonSelectOption,IonSelect} from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { Sede } from '../models/sede';
 import { SedeService } from '../services/sede.services';
 import { CommonModule } from '@angular/common';
+import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, ReactiveFormsModule,Validators } from '@angular/forms';
- 
+import { ModalFormComponent } from './Modal/modal-form/modal-form.component';
+import { ModalController } from '@ionic/angular/standalone';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [CommonModule,IonIcon, IonRow, IonCol, IonGrid, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent,IonInput,IonItem,IonButton,ReactiveFormsModule],
+  imports: [CommonModule,IonIcon, IonRow, IonCol, IonGrid, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent,IonInput,IonItem,IonButton,ReactiveFormsModule,IonCard,IonCardHeader,IonCardTitle,IonCardSubtitle,IonCardContent,IonAlert,IonSelectOption,IonSelect],
 })
 export class Tab1Page {
 
   listadoSedes: Sede[];
   form: FormGroup;
-
+ 
   constructor(private sedeService:SedeService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private alertController:AlertController,
+    private modalController: ModalController
   ) { 
   }
 
@@ -33,8 +37,8 @@ export class Tab1Page {
         nombre_sede: ['', Validators.required],
         direccion_sede: ['', Validators.required],
         telefono_contacto: ['', Validators.required],
-        tipo: ['', Validators.required],
-        estado: ['', Validators.required],
+        tipo: [''],
+        estado: [''],
       })
   }
   submitForm() {
@@ -42,6 +46,7 @@ export class Tab1Page {
     this.sedeService.agregarSedes(values).subscribe({
       next: (response: Sede[])=>{
        this.cargarDatos();
+      this.form.reset();
       },error:(error:any)=>{
         console.log("error",error)
     }
@@ -59,5 +64,72 @@ export class Tab1Page {
       }
     });
   }
+
+  async borrarsede(sede: Sede){
+    console.log(sede.idSede)
+    const alert = await this.alertController.create({
+      header: '¡Alerta!',
+      message: 'Estas seguro que deseas eliminar la sede.',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Acción cancelada');
+          },
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+           this.sedeService.eliminarSede(sede.idSede).subscribe({
+            next: (response) => {
+              console.log('Sede eliminada con éxito:', response);
+              this.cargarDatos();
+            },
+            error: (error) => {
+              console.error('Error al eliminar la sede:', error);
+            }
+           });
+          },
+        },
+      ],
+    });
+
+    await alert.present(); 
+    
+  }
+
+  async showModal(sede:Sede) {
+    const modal = await this.modalController.create({
+      component: ModalFormComponent,   // Componente modal que será abierto
+      componentProps: {
+        data: sede     // Aquí estamos pasando los datos
+      }
+    });
+
+    // Captura el resultado cuando el modal se cierra
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+       const updateData={
+        "telefono_contacto": data.data.telefono_contacto,
+        "tipo": data.data.tipo,
+        "estado": data.data.estado
+      }
+      console.log(updateData)
+      this.sedeService.editarSede(sede.idSede,updateData).subscribe({
+        next: (response) => {
+          console.log('Sede modificada con éxito:', response);
+          this.cargarDatos();
+        },
+        error: (error) => {
+          console.error('Error al modificar la sede:', error);
+        }
+       });
+
+      }
+    });
+
+    return await modal.present();
+   }
 
 }
