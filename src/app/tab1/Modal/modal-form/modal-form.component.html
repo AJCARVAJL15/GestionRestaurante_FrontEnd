@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Formulario de Datos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" >
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="floating">Nombre de la sede</ion-label>
+      <ion-input formControlName="nombre_sede"  readonly></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Ubicacion de la sede</ion-label>
+      <ion-input formControlName="direccion_sede"  readonly></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Telefono sede</ion-label>
+      <ion-input formControlName="telefono_contacto"  ></ion-input>
+    </ion-item>
+
+
+
+    <ion-item>
+      <ion-label>Tipo de Sede</ion-label>
+      <ion-select  formControlName="tipo"  required>
+        <ion-select-option value="Propia">Propia</ion-select-option>
+        <ion-select-option value="Franquicia">Franquicia</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Estado de la sede</ion-label>
+      <ion-select  formControlName="estado" required>
+        <ion-select-option value="Operativa">Operativa</ion-select-option>
+        <ion-select-option value="Mantenimiento">Mantenimiento</ion-select-option>
+        <ion-select-option value="Cerrada">Cerrada</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button color="danger" (click)="dismiss()">Cancelar</ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="save()" color="primary">Guardar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+  </form>
+</ion-content>
