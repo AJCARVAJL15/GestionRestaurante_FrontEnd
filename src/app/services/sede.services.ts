@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Sede } from "../models/sede";
 import { updateSede } from "../models/updateSede";
+import { empleado } from "../models/empleado";
 
 @Injectable({
     providedIn:'root'
@@ -30,6 +31,10 @@ export class SedeService{
                 // Otros encabezados si es necesario
               }); 
             return this.HttClient.put(url, body,{ headers });
+        }
+
+        empleadoSede(id:number):Observable<empleado[]>{
+            return this.HttClient.get<empleado[]>(`${environment.url}/empleado/buscar/${id}`);
         }
     
 }

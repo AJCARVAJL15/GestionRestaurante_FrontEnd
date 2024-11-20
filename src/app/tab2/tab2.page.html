@@ -1,43 +1,76 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Sedes
+      Empleados
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" >
-  <div class="card-container">
-  <ion-card *ngFor="let sede of listadoSedes"  class="card-block">
-    <ion-card-header>
-      <div style="display: flex; gap: 5px; justify-content: space-between;">
-        <div><ion-card-title>{{sede.nombre_sede}}</ion-card-title></div>
-       <div style="display: flex;">
-        <div>
-          <ion-button size="small">
-          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
-        </svg>
-      </ion-button>
-        </div>
-        <div>
-          <ion-button size="small">
+ 
 
-          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-        </svg>
-      </ion-button>
-        </div>
-       </div>
+  <form [formGroup]="form1" >
+    <ion-item>
+      <ion-label position="stacked">Nombre Empleado</ion-label>
+      <ion-input type="text" required formControlName="nombreEmpleado"></ion-input>
+    </ion-item>
+ 
+    <ion-item>
+      <ion-label position="stacked">Apellido Empleado</ion-label>
+      <ion-input type="text" required formControlName="apellidoEmpleado"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Fecha ingreso</ion-label>
+      <ion-input type="datetime-local" required formControlName="fechaContratacion"></ion-input>
+    </ion-item>
+ 
+    <ion-item>
+      <ion-label position="stacked">Salario</ion-label>
+      <ion-input type="numeric" required formControlName="salarioEmpleado"></ion-input>
+    </ion-item>
+ 
+
+     <ion-item>
+      <ion-select formControlName="idSede" placeholder="Sede">
+        <ion-select-option *ngFor="let sede of listadoSedes" [value]="sede.idSede">{{sede.nombre_sede}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-select formControlName="cargo" placeholder="Cargo">
+        <ion-select-option value="Cajero">Cajero</ion-select-option>
+        <ion-select-option value="Administrador">Administrador</ion-select-option>
+        <ion-select-option value="Cocinero">Cocinero</ion-select-option>
+        <ion-select-option value="Mesero">Mesero</ion-select-option>
+        <ion-select-option value="Gerente">Gerente</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+ 
+    <div class="btn-container">
+      <ion-button expand="block" (click)="submitForm()" >Registrar Empleado </ion-button>
     </div>
-   
-    </ion-card-header>
-    <ion-card-content> Ubicacion :{{sede.direccion_sede}}</ion-card-content>
-    <ion-card-content> Telefono: {{sede.telefono_contacto}} </ion-card-content>
-    <ion-card-content> Tipo de sede: {{sede.tipo}} </ion-card-content>
-    <ion-card-content> Estado:{{sede.estado}} </ion-card-content>
-  </ion-card>
-  </div>
-   <ion-button id="present-alert" expand="full" style="padding: 10px;" (click)="presentAlert()">Agregar Sede</ion-button>
+  </form>
+  <ion-list>
+    <ion-item >
+      <ion-label position="stacked">Selecciona la sede para ver los empleados asociados</ion-label>
+      <ion-select aria-label="fruit" placeholder="Sedes"  (ionChange)="onSedeChange($event)">
+        <ion-select-option *ngFor="let sede of listadoSedes" [value]="sede.idSede">{{sede.nombre_sede}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
+   <div class="card-container">
+    <ion-card *ngFor="let empleado of listadoEmpleado"  class="card-block">
+      <ion-card-header>
+        <div style="display: flex; gap: 5px; justify-content: space-between;">
+          <div><ion-card-title>{{empleado.nombreEmpleado}}</ion-card-title></div>
+      </div>
+     
+      </ion-card-header>
+      <ion-card-content> Salario :{{empleado.salario_empleado}}</ion-card-content>
+      <ion-card-content> Cargo: {{empleado.cargo}} </ion-card-content>
+    </ion-card>
+    </div>
 </ion-content>
