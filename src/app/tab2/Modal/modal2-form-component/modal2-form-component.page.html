@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Formulario de Datos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" >
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="floating">Nombre empleado</ion-label>
+      <ion-input formControlName="nombreEmpleado"  ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">apellido empleado</ion-label>
+      <ion-input formControlName="apellidoEmpleado" ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Fecha Contratacion</ion-label>
+      <ion-input formControlName="fecha_contratacion" type="datetime-local" ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Salario Empleado</ion-label>
+      <ion-input formControlName="salario_empleado"  ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Sede</ion-label>
+      <ion-select  formControlName="idSede"  required>
+        <ion-select-option *ngFor="let sede of listadoSedes" [value]="sede.idSede">{{sede.nombre_sede}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+
+    <ion-item>
+      <ion-label>Cargo</ion-label>
+      <ion-select  formControlName="cargo"  required>
+        <ion-select-option value="Cajero">Cajero</ion-select-option>
+        <ion-select-option value="Administrador">Administrador</ion-select-option>
+        <ion-select-option value="Cocinero">Cocinero</ion-select-option>
+        <ion-select-option value="Gerente">Gerente</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button color="danger" (click)="dismiss()">Cancelar</ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="save()" color="primary">Guardar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+  </form>
+</ion-content>

@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormControlName, FormGroup, ReactiveFormsModule,Validators } from '@angular/forms';
 import { empleado } from '../models/empleado';
+import { ModalController } from '@ionic/angular/standalone';
+import { Modal2FormComponentPage } from './Modal/modal2-form-component/modal2-form-component.page';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class Tab2Page {
   constructor(private sedeService:SedeService,
     private formBuilder: FormBuilder,
     private alertController: AlertController,
-    private empleadoService: EmpleadoService
+    private empleadoService: EmpleadoService,
+    private modalController:ModalController
   ) { 
   }
 
@@ -60,87 +63,6 @@ export class Tab2Page {
     });
   }
 
-  // async presentAlert() {
-  //   const alert = await this.alertController.create({
-  //     header: 'Por favor ingresa la información',
-  //     inputs: [
-  //       {
-  //         name: 'nombre_sede',
-  //         type: 'text',
-  //         placeholder: 'Nombre de la sede',
-  //         value: this.form.get('nombre_sede')?.value, 
-  //       },
-  //       {
-  //         name: 'direccion_sede',
-  //         type: 'text',
-  //         placeholder: 'Dirección de la sede',
-  //         value: this.form.get('direccion_sede')?.value,
-  //       },
-  //       {
-  //         name: 'telefono_contacto',
-  //         type: 'tel',
-  //         placeholder: 'Teléfono de contacto',
-  //         value: this.form.get('telefono_contacto')?.value,
-  //       },
-  //       {
-  //         name: 'tipo',
-  //         type: 'radio',
-  //         label: 'Oficina',  // El primer radio para "Oficina"
-  //     value: 'oficina',  // El valor que se asignará si se selecciona
-  //       checked: this.form1.get('tipo')?.value === 'oficina'
-  //       },
-  //       {
-  //         name: 'estado',
-  //         type: 'text',
-  //         placeholder: 'Estado de la sede',
-  //         value: this.form.get('estado')?.value,
-  //       },
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Cancelar',
-  //         role: 'cancel',
-  //       },
-  //       {
-  //         text: 'Aceptar',
-  //         handler: (data) => {
-  //           // Actualizamos el FormGroup con los datos ingresados en el alert
-  //           this.form.patchValue({
-  //             nombre_sede: data.nombre_sede,
-  //             direccion_sede: data.direccion_sede,
-  //             telefono_contacto: data.telefono_contacto,
-  //             tipo: data.tipo,
-  //             estado: data.estado,
-  //           });
-            
-  //           if (this.form.valid) {
-  //             this.form.updateValueAndValidity();
-  //             console.log('Formulario actualizado:', this.form.value);
-  //             this.showErrorAlert('Sede agregada correectamente'); 
-  //             const values=this.form.value;
-  //             this.sedeService.agregarSedes(values).subscribe({
-  //               next: (response: Sede[])=>{
-  //                this.cargarDatos();
-  //               },error:(error:any)=>{
-  //                 this.showErrorAlert('Error'); 
-  //             }
-              
-  //             })
-
-  //             this.form.reset();
-  //             return true; // Permite cerrar el alert
-  //           } else {
-  //             console.log('Formulario no válido');
-  //             this.showErrorAlert('Hubo un error al intentar actualizar los datos. Por favor, inténtalo de nuevo.');
-  //             return false; // Evita que el alert se cierre
-  //           }
-  //         },
-  //       },
-  //     ],
-  //   });
-
-  //   await alert.present();
-  // }
   private async showErrorAlert(errorMessage: string) {
     const alert = await this.alertController.create({
       header: 'Error',
@@ -183,6 +105,44 @@ empleadosPorSede(selectedSedeId:number){
     }
     })
     //onsole.log(this.form1.value)
+  }
+
+  async showModal(Empleado:empleado){
+
+    console.log("click")
+    const modal = await this.modalController.create({
+      component: Modal2FormComponentPage,   // Componente modal que será abierto
+      componentProps: {
+        data: Empleado     // Aquí estamos pasando los datos
+      }
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+       const updateData={
+        "nombreEmpleado": data.data.nombreEmpleado,
+        "apellidoEmpleado": data.data.apellidoEmpleado,
+        "fecha_contratacion": data.data.fecha_contratacion,
+        "salario_empleado":data.data.salario_empleado,
+        "idSede":data.data.idSede,
+        "cargo":data.data.cargo,
+      }
+      console.log(updateData)
+      this.empleadoService.editarEmpleado(Empleado.id_empleado,updateData).subscribe({
+        next: (response) => {
+          console.log('EMPLEADO modificada con éxito:', response);
+          this.cargarDatos();
+          this.empleadosPorSede(data.data.idSede);
+        },
+        error: (error) => {
+          console.error('Error al modificar EL EMPLEADO:', error);
+        }
+       });
+
+      }
+    });
+    return await modal.present();
+
   }
   
 }
