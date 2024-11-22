@@ -93,17 +93,33 @@ empleadosPorSede(selectedSedeId:number){
 
   }
 
+  async mostrarAlerta(subheader:string) {
+    const alert = await this.alertController.create({
+      header: "Alerta",
+      message: subheader,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
   submitForm() {
     const values=this.form1.value;
     const id=this.form1.value.idSede;
+    if(this.form1.valid){
     this.empleadoService.agregarEmpleados(values).subscribe({
       next: (response: empleado[])=>{
       this.form1.reset();
       this.empleadosPorSede(id);
+      this.mostrarAlerta("Se agrego emleado con exito")
       },error:(error:any)=>{
         console.log("error",error)
+        this.mostrarAlerta("Error al agregar empleado")
     }
     })
+  }else{
+    this.mostrarAlerta("Debes completar todos los campos")
+  }
     //onsole.log(this.form1.value)
   }
 
@@ -131,11 +147,14 @@ empleadosPorSede(selectedSedeId:number){
       this.empleadoService.editarEmpleado(Empleado.id_empleado,updateData).subscribe({
         next: (response) => {
           console.log('EMPLEADO modificada con éxito:', response);
+          this.mostrarAlerta("Empleado modificado con exito")
           this.cargarDatos();
           this.empleadosPorSede(data.data.idSede);
         },
         error: (error) => {
           console.error('Error al modificar EL EMPLEADO:', error);
+          this.mostrarAlerta("Error al modificar emleado")
+
         }
        });
 

@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular/standalone';
 import { IonRow,IonCol,IonGrid,IonLabel,IonInput,IonItem,IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,IonCard,IonCardHeader,IonCardTitle,IonCardSubtitle,IonCardContent,IonButton,IonAlert,IonIcon,IonSelectOption,IonSelect,IonFooter} from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule,Validators } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-modal-form',
@@ -15,7 +16,8 @@ export class ModalFormComponent  implements OnInit {
   @Input() data: any;
   form: FormGroup;
   constructor(private modalController: ModalController,
-    private formBuilder:FormBuilder
+    private formBuilder:FormBuilder,
+    private alertController:AlertController
   ) {
    
    }
@@ -28,6 +30,16 @@ export class ModalFormComponent  implements OnInit {
       tipo: [this.data.tipo],
       estado: [this.data.estado],
     })
+}
+
+async mostrarAlerta(subheader:string) {
+  const alert = await this.alertController.create({
+    header: "Alerta",
+    message: subheader,
+    buttons: ['OK']
+  });
+
+  await alert.present();
 }
   ngOnInit() {
     console.log('Datos recibidos en el modal:', this.data);
@@ -45,6 +57,7 @@ export class ModalFormComponent  implements OnInit {
       this.modalController.dismiss(formData);  // Enviar los datos al componente padre (Tab)
     } else {
       console.log('Formulario no válido');
+      this.mostrarAlerta("Debes completar todos los campos")
     }
   }
 }

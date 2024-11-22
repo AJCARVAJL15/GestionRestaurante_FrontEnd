@@ -41,17 +41,34 @@ export class Tab1Page {
         estado: [''],
       })
   }
+  async mostrarAlerta(subheader:string) {
+    const alert = await this.alertController.create({
+      header: "Alerta",
+      message: subheader,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
   submitForm() {
     const values=this.form.value;
-    this.sedeService.agregarSedes(values).subscribe({
-      next: (response: Sede[])=>{
-       this.cargarDatos();
-      this.form.reset();
-      },error:(error:any)=>{
-        console.log("error",error)
+
+    if(this.form.valid){
+      this.sedeService.agregarSedes(values).subscribe({
+        next: (response: Sede[])=>{
+         this.cargarDatos();
+        this.form.reset();
+        this.mostrarAlerta("Sede agregada con exito")
+        },error:(error:any)=>{
+          console.log("error",error)
+          this.mostrarAlerta("Error al enviar los datos")
+      }
+      })
+    }else{
+      this.mostrarAlerta("Debes completar todos los campos")
     }
-    })
-    console.log(this.form.value)
+   
+    
   }
 
   private cargarDatos():void{
@@ -119,9 +136,11 @@ export class Tab1Page {
       this.sedeService.editarSede(sede.idSede,updateData).subscribe({
         next: (response) => {
           console.log('Sede modificada con éxito:', response);
+          this.mostrarAlerta("Sede modificada con éxito")
           this.cargarDatos();
         },
         error: (error) => {
+          this.mostrarAlerta("Error al modificar la sede")
           console.error('Error al modificar la sede:', error);
         }
        });

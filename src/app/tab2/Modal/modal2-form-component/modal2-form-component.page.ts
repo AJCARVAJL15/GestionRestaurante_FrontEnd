@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule,Validators } from '@angular/forms';
 import { SedeService } from 'src/app/services/sede.services';
 import { Sede } from 'src/app/models/sede';
+import { AlertController } from '@ionic/angular';
+
 @Component({
   selector: 'app-modal2-form-component',
   templateUrl: './modal2-form-component.page.html',
@@ -19,7 +21,8 @@ export class Modal2FormComponentPage implements OnInit {
   listadoSedes: Sede[];
   constructor(private modalController: ModalController,
     private formBuilder:FormBuilder,
-    private sedeService:SedeService
+    private sedeService:SedeService,
+    private alertController:AlertController
   ) {
    
    }
@@ -40,7 +43,15 @@ export class Modal2FormComponentPage implements OnInit {
     this.iniciarFormulario();
     this.cargarDatos();
   }
+  async mostrarAlerta(subheader:string) {
+    const alert = await this.alertController.create({
+      header: "Alerta",
+      message: subheader,
+      buttons: ['OK']
+    });
 
+    await alert.present();
+  }
   
   private cargarDatos():void{
     this.sedeService.consultarSedes().subscribe({
@@ -64,7 +75,7 @@ export class Modal2FormComponentPage implements OnInit {
       this.modalController.dismiss(formData); 
       console.log(formData) 
     } else {
-      console.log('Formulario no válido');
+      this.mostrarAlerta("Debes completar todos los campos")
     }
   }
 }
